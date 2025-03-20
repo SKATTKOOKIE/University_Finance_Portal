@@ -1,34 +1,44 @@
 <?php
-session_start();
-// Checks that a username has been entered
-if (!isset($_POST['username'])){
-    header('Location: index.php?redirect="true"');
-}
+    session_start();
+    require_once("functions.php");
 
-$db = connectdb();
-#Checks if the username exists, if it does it stores the relevant data from that row
-foreach ($db->query("select * from users") as $row){
-    if ($row['username'] == $_POST['username']){
-        $userid = $row['user_id'];
-        $username = $row['user_name'];
-        $password = $row['password'];
-        $firstname = $row['first_name'];
+    // Validate form submission
+    if (!isset($_POST['username']) || !isset($_POST['password']))
+    {
+        header('Location: index.php?redirect=missing_fields');
+        exit;
     }
-}
 
-// Check if the username and password that were submitted in login.php are correct
-if($_POST['username'] == $username AND $_POST['password'] == $password){
-    // If they are correct the session variable logged_in is set to true and the user is redirected to pageHome.php
-    $_SESSION['logged_in'] = TRUE;
-    $_SESSION['firstname'] = $firstname;
-    $_SESSION['userid'] = $userid;
-    updatelastlogin($userid);
-    header('Location: homepage.php');
-}
-else{
-    // If the credentials are incorrect the user is redirected back to login.php
-    // setting redirect to true tells the login page that the user has already had a failed login attempt
-    $_SESSION['logged_in'] = FALSE;
-    header('Location: login.php?redirect="true"');
-}
+    $db = connectdb();
+
+    // Use prepared statements with the correct column name (user_name instead of username)
+    $stmt = $db->prepare("SELECT user_id, user_name, password, first_name FROM users WHERE user_name = ?");
+    $stmt->execute([$_POST['username']]);
+    $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    // Verify password (plain text for now, should be hashed in the future)
+    if ($user && $_POST['password'] === $user['password']) 
+    {
+        // Regenerate session ID to prevent session fixation
+        session_regenerate_id(true);
+        
+        $_SESSION['logged_in'] = TRUE;
+        $_SESSION['firstname'] = $user['first_name'];
+        $_SESSION['userid'] = $user['user_id'];
+        
+        // Check if the function exists before calling it
+        if (function_exists('updatelastlogin')) 
+        {
+            updatelastlogin($user['user_id']);
+        }
+        
+        header('Location: homepage.php');
+        exit;
+    } 
+    else 
+    {
+        $_SESSION['logged_in'] = FALSE;
+        header('Location: login.php?redirect=failed');
+        exit;
+    }
 ?>
