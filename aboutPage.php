@@ -14,14 +14,14 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Home - Finance Portal</title>
+        <title>About - Finance Portal</title>
         <link rel="stylesheet" href="style.css">
     </head>
     <body>
-        <?php renderNavbar('Finance Portal', 'Home'); ?>
+        <?php renderNavbar('Finance Portal', 'About'); ?>
 
         <main>
-            <h1>Welcome to the Finance Portal!</h1>
+            <h1>About us!</h1>
         </main>
     </body>
 </html>

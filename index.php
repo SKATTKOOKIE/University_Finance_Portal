@@ -4,7 +4,18 @@
     // If $_GET['redirect'] is set it means the user has already had an attempt at loging in and they get a pop up alert
     if(isset($_GET['redirect']))
     {
-        echo "<script>alert('Incorrect Username or Password');</script>";
+        if($_GET['redirect'] == 'failed') 
+        {
+            $errorMessage = 'Incorrect username or password. Please try again.';
+        }
+        else if($_GET['redirect'] == 'missing_fields') 
+        {
+            $errorMessage = 'Please fill in all required fields.';
+        } 
+        else if($_GET['redirect'] == 'logout') 
+        {
+            $successMessage = 'You have been successfully logged out.';
+        }
     }
 ?>
 <!DOCTYPE html>
@@ -16,17 +27,35 @@
         <link rel="stylesheet" href="style.css">
     </head>
     <body>
-        <header>
-            <h1 id="loginHeader">Welcome to the Finance Portal!</h1>
-        </header>
-        <main>
+        <div class="login-container">
+            <h1 class="login-header">Finance Portal</h1>
+            
+            <?php if(isset($errorMessage)): ?>
+                <div class="alert alert-error" style="background-color: #ffeeee; color: #dd0000; padding: 10px; border-radius: 4px; margin-bottom: 20px; text-align: center;">
+                    <?php echo $errorMessage; ?>
+                </div>
+            <?php endif; ?>
+            
+            <?php if(isset($successMessage)): ?>
+                <div class="alert alert-success" style="background-color: #eeffee; color: #00aa00; padding: 10px; border-radius: 4px; margin-bottom: 20px; text-align: center;">
+                    <?php echo $successMessage; ?>
+                </div>
+            <?php endif; ?>
+            
             <!-- Form allows user to enter login details and it proceeds to credCheck.php which checks if the login details are valid -->
-            <form action="credCheck.php" method="post">
-                <label for="username">Username:</label><br>
-                <input type="text" name="username" id="username" required><br>
-                <label for="password">Password:</label><br>
-                <input type="password" name="password" id="password" required><br>
-                <button type="submit">Login</button>
+            <form action="credCheck.php" method="post" class="login-form">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" name="username" id="username" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" name="password" id="password" required>
+                </div>
+                
+                <button type="submit" class="login-button">Login</button>
             </form>
+        </div>
     </body>
 </html>
