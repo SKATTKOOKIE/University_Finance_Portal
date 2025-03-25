@@ -20,7 +20,6 @@ $firstName = $isLoggedIn ? $_SESSION['firstname'] : '';
 function renderNavbar($siteName = 'Finance Portal', $activePage = '') {
     global $isLoggedIn, $firstName;
 ?>
-    <!-- Navbar HTML Structure -->
     <link rel="stylesheet" href="style.css">
     
     <nav class="navbar">

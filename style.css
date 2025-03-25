@@ -17,7 +17,10 @@ body {
     color: var(--text-dark);
 }
 
-/* Navbar styles */
+/* ============================================= */
+
+/* =============== Navbar styles =============== */
+
 .navbar 
 {
     display: flex;
@@ -140,7 +143,8 @@ body {
 }
 
 /* Hamburger menu styles */
-.hamburger-menu {
+.hamburger-menu 
+{
     display: none;
     cursor: pointer;
     width: 30px;
@@ -151,7 +155,8 @@ body {
     justify-content: space-between;
 }
 
-.hamburger-menu span {
+.hamburger-menu span 
+{
     display: block;
     height: 3px;
     width: 100%;
@@ -160,18 +165,21 @@ body {
     transition: all 0.3s ease;
 }
 
-/* Media query for responsive design */
-@media (max-width: 768px) {
-    .hamburger-menu {
+@media (max-width: 768px) 
+{
+    .hamburger-menu 
+    {
         display: flex;
     }
     
-    .navbar-container {
+    .navbar-container 
+    {
         display: flex;
         align-items: center;
     }
     
-    .nav-links-container {
+    .nav-links-container 
+    {
         display: none;
         position: absolute;
         top: 100%;
@@ -185,30 +193,36 @@ body {
         padding: 1rem 0;
     }
     
-    .nav-links-container.active {
+    .nav-links-container.active 
+    {
         display: flex;
     }
     
-    .nav-links-container .nav-link {
+    .nav-links-container .nav-link 
+    {
         margin: 0.5rem 2rem;
         width: calc(100% - 4rem);
     }
     
-    .navbar-links {
+    .navbar-links 
+    {
         justify-content: flex-end;
         width: 100%;
     }
     
     /* Keep user profile visible */
-    .user-profile {
+    .user-profile 
+    {
         margin-left: 0;
     }
 }
 
-/* ---------------------------------------- */
+/* ============================================= */
 
-/* Updated Login Page Styles */
-.login-container {
+/* ============= Login Page styles ============= */
+
+.login-container 
+{
     max-width: 400px;
     margin: 3rem auto;
     padding: 2rem;
@@ -217,7 +231,8 @@ body {
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
-.login-header {
+.login-header 
+{
     text-align: center;
     color: var(--pastel-purple);
     margin-bottom: 2rem;
@@ -225,23 +240,27 @@ body {
     font-weight: bold;
 }
 
-.login-form {
+.login-form 
+{
     display: flex;
     flex-direction: column;
 }
 
-.form-group {
+.form-group 
+{
     margin-bottom: 1.5rem;
 }
 
-.form-group label {
+.form-group label 
+{
     display: block;
     margin-bottom: 0.5rem;
     color: var(--text-dark);
     font-weight: 500;
 }
 
-.form-group input {
+.form-group input 
+{
     width: 100%;
     padding: 0.8rem;
     border: 1px solid var(--light-grey);
@@ -250,13 +269,15 @@ body {
     transition: border-color 0.3s ease;
 }
 
-.form-group input:focus {
+.form-group input:focus 
+{
     outline: none;
     border-color: var(--pastel-purple);
     box-shadow: 0 0 0 2px rgba(93, 74, 138, 0.2);
 }
 
-.login-button {
+.login-button 
+{
     background-color: var(--pastel-purple);
     color: white;
     border: none;
@@ -268,13 +289,17 @@ body {
     transition: background-color 0.3s ease;
 }
 
-.login-button:hover {
+.login-button:hover 
+{
     background-color: var(--light-purple);
 }
 
-/* ============================= */
+/* ============================================= */
 
-.transaction-container {
+/* ========== Transaction Page styles ========== */
+
+.transaction-container 
+{
     max-width: 800px;
     margin: 2rem auto;
     padding: 2rem;
@@ -283,7 +308,8 @@ body {
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
-.toggle-container {
+.toggle-container 
+{
     display: flex;
     margin-bottom: 2rem;
     background-color: var(--light-grey);
@@ -294,7 +320,8 @@ body {
     margin-right: auto;
 }
 
-.toggle-option {
+.toggle-option 
+{
     flex: 1;
     text-align: center;
     padding: 12px 0;
@@ -305,11 +332,13 @@ body {
     transition: color 0.3s ease;
 }
 
-.toggle-option.active {
+.toggle-option.active 
+{
     color: white;
 }
 
-.toggle-slider {
+.toggle-slider 
+{
     position: absolute;
     height: 100%;
     width: 50%;
@@ -319,22 +348,26 @@ body {
     left: 0;
 }
 
-.transaction-form {
+.transaction-form 
+{
     margin-top: 1.5rem;
 }
 
-.form-group {
+.form-group 
+{
     margin-bottom: 1.5rem;
 }
 
-.form-group label {
+.form-group label 
+{
     display: block;
     margin-bottom: 0.5rem;
     color: var(--text-dark);
     font-weight: 500;
 }
 
-.form-group input, .form-group textarea {
+.form-group input, .form-group textarea 
+{
     width: 100%;
     padding: 0.8rem;
     border: 1px solid var(--light-grey);
@@ -343,13 +376,15 @@ body {
     transition: border-color 0.3s ease;
 }
 
-.form-group input:focus, .form-group textarea:focus {
+.form-group input:focus, .form-group textarea:focus 
+{
     outline: none;
     border-color: var(--pastel-purple);
     box-shadow: 0 0 0 2px rgba(93, 74, 138, 0.2);
 }
 
-.submit-button {
+.submit-button 
+{
     background-color: var(--pastel-purple);
     color: white;
     border: none;
@@ -362,34 +397,291 @@ body {
     width: 100%;
 }
 
-.submit-button:hover {
+.submit-button:hover 
+{
     background-color: var(--light-purple);
 }
 
-.message {
+.message 
+{
     padding: 1rem;
     border-radius: 4px;
     margin-bottom: 1.5rem;
     text-align: center;
 }
 
-.message.success {
+.message.success 
+{
     background-color: #eeffee;
     color: #00aa00;
 }
 
-.message.error {
+.message.error 
+{
     background-color: #ffeeee;
     color: #dd0000;
 }
 
-.section-title {
+.section-title 
+{
     color: var(--pastel-purple);
     text-align: center;
     margin-bottom: 1.5rem;
 }
 
+.balance-display 
+{
+    text-align: center;
+    margin-bottom: 1.5rem;
+    font-size: 1.1rem;
+}
+
+.balance-amount 
+{
+    font-weight: bold;
+    color: var(--pastel-purple);
+    font-size: 1.3rem;
+}
+
 /* Hide one form by default */
-#withdraw-form {
+#withdraw-form 
+{
     display: none;
 }
+
+/* Processing overlay */
+.processing-overlay 
+{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s, visibility 0.3s;
+}
+
+.processing-overlay.active 
+{
+    opacity: 1;
+    visibility: visible;
+}
+
+.processing-content 
+{
+    background-color: white;
+    padding: 2rem;
+    border-radius: 8px;
+    text-align: center;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    max-width: 80%;
+}
+
+.processing-spinner 
+{
+    border: 5px solid var(--light-grey);
+    border-top: 5px solid var(--pastel-purple);
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    margin: 0 auto 1rem;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin 
+{
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* ============================================= */
+
+/* ============== Dashboard styles ============= */
+
+.dashboard-container 
+{
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.welcome-header 
+{
+    color: var(--pastel-purple);
+    text-align: center;
+    margin-bottom: 2rem;
+    font-size: 1.8rem;
+}
+
+.balance-card 
+{
+    background-color: var(--off-white);
+    border-radius: 8px;
+    padding: 2rem;
+    text-align: center;
+    margin-bottom: 2rem;
+    border-left: 5px solid var(--pastel-purple);
+}
+
+.balance-title 
+{
+    color: var(--text-dark);
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+}
+
+.balance-amount 
+{
+    color: var(--pastel-purple);
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+}
+
+.actions-container 
+{
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.action-button 
+{
+    background-color: var(--pastel-purple);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 0.8rem 1.5rem;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.action-button:hover 
+{
+    background-color: var(--light-purple);
+}
+
+.recent-transactions 
+{
+    margin-top: 2rem;
+}
+
+.section-title 
+{
+    color: var(--pastel-purple);
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+/* ============================================= */
+
+/* ============== Transaction history dashboard styles ============= */
+
+.transaction-history-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1.5rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.transaction-table-container {
+    max-height: 300px;
+    overflow-y: auto;
+    border-radius: 8px;
+    margin-top: 1.5rem;
+}
+
+.transaction-history-table th {
+    background-color: var(--pastel-purple);
+    color: white;
+    padding: 1rem;
+    text-align: left;
+    font-weight: 500;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.transaction-history-table td {
+    padding: 0.8rem 1rem;
+    border-bottom: 1px solid var(--light-grey);
+}
+
+.transaction-history-table tr:nth-child(even) {
+    background-color: var(--off-white);
+}
+
+.transaction-history-table tr:nth-child(odd) {
+    background-color: white;
+}
+
+.transaction-history-table tr:hover {
+    background-color: rgba(93, 74, 138, 0.05);
+}
+
+.transaction-history-table tr:last-child td {
+    border-bottom: none;
+}
+
+.transaction-amount {
+    font-weight: 500;
+    text-align: right;
+}
+
+.amount-positive {
+    color: #00aa00;
+}
+
+.amount-negative {
+    color: #dd0000;
+}
+
+.transaction-type {
+    font-weight: 500;
+    text-transform: capitalize;
+}
+
+.no-transactions {
+    text-align: center;
+    padding: 2rem;
+    color: var(--text-dark);
+    font-style: italic;
+}
+
+/* Custom scrollbar styling for the transaction table */
+.transaction-table-container::-webkit-scrollbar {
+    width: 6px;
+}
+
+.transaction-table-container::-webkit-scrollbar-track {
+    background: var(--light-grey);
+    border-radius: 10px;
+}
+
+.transaction-table-container::-webkit-scrollbar-thumb {
+    background: var(--pastel-purple);
+    border-radius: 10px;
+}
+
+.transaction-table-container::-webkit-scrollbar-thumb:hover {
+    background: var(--light-purple);
+}
+
+/* ============================================= */
