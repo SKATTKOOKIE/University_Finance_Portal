@@ -271,6 +271,15 @@ function getRedirectMessages()
             case 'insufficient_funds':
                 $messages['error'] = 'Insufficient funds for this transaction.';
                 break;
+            case 'incorrect_password':
+                $messages['error'] = 'The current password you entered is incorrect.';
+                break;
+            case 'update_error':
+                $messages['error'] = 'An error occurred while updating your information. Please try again later.';
+                break;
+            case 'password_updated':
+                $messages['success'] = 'Your password has been updated successfully.';
+                break;
 
             // Success messages
             case 'logout':
@@ -285,9 +294,6 @@ function getRedirectMessages()
             case 'withdrawal_success':
                 $messages['success'] = 'Withdrawal completed successfully.';
                 break;
-            case 'password_updated':
-                $messages['success'] = 'Password updated successfully.';
-                break;
             case 'profile_updated':
                 $messages['success'] = 'Profile information updated successfully.';
                 break;
@@ -299,4 +305,177 @@ function getRedirectMessages()
 
     return $messages;
 }
+
+/**
+ * Get user spending summary for different time periods
+ * 
+ * @param int $userId User ID
+ * @return array|bool Array with spending data or false on error
+ */
+function getUserSpendingSummary($userId)
+{
+    try
+    {
+        $db = connectdb();
+
+        // Get account for this user
+        $stmt = $db->prepare("SELECT account_id FROM accounts WHERE user_id = ?");
+        $stmt->execute([ $userId ]);
+        $account = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if (!$account)
+        {
+            return false; // No account found
+        }
+
+        $accountId = $account['account_id'];
+
+        // Calculate dates for different time periods
+        $currentDate = new DateTime();
+
+        $oneWeekAgo = (clone $currentDate)->modify('-1 week');
+        $oneMonthAgo = (clone $currentDate)->modify('-1 month');
+        $threeMonthsAgo = (clone $currentDate)->modify('-3 months');
+        $sixMonthsAgo = (clone $currentDate)->modify('-6 months');
+        $oneYearAgo = (clone $currentDate)->modify('-1 year');
+
+        // Format dates for SQL
+        $oneWeekAgoFormatted = $oneWeekAgo->format('Y-m-d H:i:s');
+        $oneMonthAgoFormatted = $oneMonthAgo->format('Y-m-d H:i:s');
+        $threeMonthsAgoFormatted = $threeMonthsAgo->format('Y-m-d H:i:s');
+        $sixMonthsAgoFormatted = $sixMonthsAgo->format('Y-m-d H:i:s');
+        $oneYearAgoFormatted = $oneYearAgo->format('Y-m-d H:i:s');
+
+        // Get spending for each time period (only withdrawals/negative transactions)
+        $getSpending = function ($fromDate) use ($db, $accountId)
+        {
+            $stmt = $db->prepare("
+                SELECT SUM(ABS(amount)) as total_spent
+                FROM transactions
+                INNER JOIN payments ON transactions.payment_id = payments.payment_id
+                WHERE transactions.account_id = ? 
+                AND transactions.amount < 0
+                AND transactions.time >= ?
+            ");
+            $stmt->execute([ $accountId, $fromDate ]);
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            return $result['total_spent'] ?: 0;
+        };
+
+        // Calculate spending for each time period
+        $spending = [ 
+            'week' => $getSpending($oneWeekAgoFormatted),
+            'month' => $getSpending($oneMonthAgoFormatted),
+            'three_months' => $getSpending($threeMonthsAgoFormatted),
+            'six_months' => $getSpending($sixMonthsAgoFormatted),
+            'year' => $getSpending($oneYearAgoFormatted)
+        ];
+
+        return $spending;
+
+    }
+    catch ( Exception $e )
+    {
+        error_log("Error getting spending summary: " . $e->getMessage());
+        return false;
+    }
+}
+
+/**
+ * Get user details from database
+ * 
+ * @param int $userId User ID
+ * @return array|bool User details or false on error
+ */
+function getUserDetails($userId)
+{
+    try
+    {
+        $db = connectdb();
+        $stmt = $db->prepare("SELECT * FROM users WHERE user_id = ?");
+        $stmt->execute([ $userId ]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+    catch ( Exception $e )
+    {
+        error_log("Error getting user details: " . $e->getMessage());
+        return false;
+    }
+}
+
+/**
+ * Verify user password
+ * 
+ * @param int $userId User ID
+ * @param string $password Password to verify
+ * @return bool True if password is valid, false otherwise
+ */
+function verifyUserPassword($userId, $password)
+{
+    try
+    {
+        $db = connectdb();
+
+        // Get user from database
+        $stmt = $db->prepare("SELECT * FROM users WHERE user_id = ?");
+        $stmt->execute([ $userId ]);
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if (!$user)
+        {
+            return false;
+        }
+
+        // Check if this is a legacy account (before salt was implemented)
+        if (empty($user['salt']))
+        {
+            // For backward compatibility with old accounts
+            return ($password === $user['password']);
+        }
+        else
+        {
+            // Modern account with salt
+            return password_verify($password . $user['salt'], $user['password']);
+        }
+    }
+    catch ( Exception $e )
+    {
+        error_log("Error verifying password: " . $e->getMessage());
+        return false;
+    }
+}
+
+/**
+ * Update user password
+ * 
+ * @param int $userId User ID
+ * @param string $newPassword New password
+ * @return bool True on success, false on failure
+ */
+function updateUserPassword($userId, $newPassword)
+{
+    try
+    {
+        $db = connectdb();
+
+        // Generate a new salt
+        $salt = bin2hex(random_bytes(16)); // 32 character salt
+
+        // Hash the new password with the salt
+        $hashedPassword = password_hash($newPassword . $salt, PASSWORD_BCRYPT);
+
+        // Update the password in the database
+        $stmt = $db->prepare("UPDATE users SET password = ?, salt = ? WHERE user_id = ?");
+        $stmt->execute([ $hashedPassword, $salt, $userId ]);
+
+        return true;
+    }
+    catch ( Exception $e )
+    {
+        error_log("Error updating password: " . $e->getMessage());
+        return false;
+    }
+}
+
+
 ?>
