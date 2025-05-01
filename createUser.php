@@ -15,6 +15,40 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
         exit;
     }
 
+    // Validate names (only letters, no spaces)
+    if (!preg_match('/^[A-Za-z]+$/', $_POST['first_name']) || !preg_match('/^[A-Za-z]+$/', $_POST['last_name']))
+    {
+        header("Location: createUserPage.php?redirect=invalid_name");
+        exit;
+    }
+
+    // Validate email format
+    if (!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL))
+    {
+        header("Location: createUserPage.php?redirect=invalid_email");
+        exit;
+    }
+
+    // Validate username (letters, numbers, underscores only, 3-20 chars)
+    if (!preg_match('/^[A-Za-z0-9_]{3,20}$/', $_POST['username']))
+    {
+        header("Location: createUserPage.php?redirect=invalid_username");
+        exit;
+    }
+
+    // Validate password complexity
+    $password = $_POST['password'];
+    if (
+        strlen($password) < 8 || strlen($password) > 20 ||
+        !preg_match('/[A-Z]/', $password) ||
+        !preg_match('/[0-9]/', $password) ||
+        !preg_match('/[^A-Za-z0-9]/', $password)
+    )
+    {
+        header("Location: createUserPage.php?redirect=invalid_password");
+        exit;
+    }
+
     // Check if passwords match
     if ($_POST['password'] !== $_POST['confirm_password'])
     {
