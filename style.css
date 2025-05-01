@@ -246,6 +246,11 @@ body {
     flex-direction: column;
 }
 
+.login-create-user-container
+{
+    margin-top: 5px;
+}
+
 .form-group 
 {
     margin-bottom: 1.5rem;
