@@ -305,3 +305,152 @@ function initFormValidation(formId)
         }
     });
 }
+
+/**
+ * Initialize password toggle visibility for password fields
+ * This function adds show/hide functionality to password inputs
+ * Only allows one password to be visible at a time for security
+ * 
+ * @param {Array} fieldIds - Array of password field IDs or single field ID
+ */
+function initPasswordToggle(fieldIds) {
+    // Allow both array and single string
+    if (!Array.isArray(fieldIds)) {
+        fieldIds = [fieldIds];
+    }
+    
+    // Create the toggle buttons for each field
+    fieldIds.forEach(fieldId => {
+        const passwordField = document.getElementById(fieldId);
+        if (!passwordField) return;
+        
+        // Create container if needed
+        let container = passwordField.parentElement;
+        if (!container.classList.contains('password-input-container')) {
+            // Create a container
+            container = document.createElement('div');
+            container.className = 'password-input-container';
+            
+            // Insert container before the password field
+            passwordField.parentNode.insertBefore(container, passwordField);
+            
+            // Move password field inside container
+            container.appendChild(passwordField);
+        }
+        
+        // Create toggle button
+        const toggleButton = document.createElement('button');
+        toggleButton.type = 'button';
+        toggleButton.className = 'password-toggle';
+        toggleButton.setAttribute('data-target', fieldId);
+        toggleButton.innerHTML = `
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" 
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="eye-icon">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                <circle cx="12" cy="12" r="3"></circle>
+            </svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" 
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="eye-slash-icon" style="display:none">
+                <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                <line x1="1" y1="1" x2="23" y2="23"></line>
+            </svg>
+        `;
+        
+        // Add button to container
+        container.appendChild(toggleButton);
+    });
+    
+    // Add the necessary CSS
+    addPasswordToggleStyles();
+    
+    // Initialize toggle functionality
+    let currentlyVisible = null;
+    
+    document.addEventListener('click', function(event) {
+        if (!event.target.closest('.password-toggle')) return;
+        
+        const toggle = event.target.closest('.password-toggle');
+        const targetId = toggle.getAttribute('data-target');
+        const passwordInput = document.getElementById(targetId);
+        const eyeIcon = toggle.querySelector('.eye-icon');
+        const eyeSlashIcon = toggle.querySelector('.eye-slash-icon');
+        
+        // If another password field is currently visible, hide it first
+        if (currentlyVisible && currentlyVisible !== passwordInput) {
+            const otherToggle = document.querySelector(`.password-toggle[data-target="${currentlyVisible.id}"]`);
+            const otherEyeIcon = otherToggle.querySelector('.eye-icon');
+            const otherEyeSlashIcon = otherToggle.querySelector('.eye-slash-icon');
+            
+            currentlyVisible.type = 'password';
+            otherEyeIcon.style.display = 'block';
+            otherEyeSlashIcon.style.display = 'none';
+        }
+        
+        // Toggle current password visibility
+        if (passwordInput.type === 'password') {
+            passwordInput.type = 'text';
+            eyeIcon.style.display = 'none';
+            eyeSlashIcon.style.display = 'block';
+            currentlyVisible = passwordInput;
+        } else {
+            passwordInput.type = 'password';
+            eyeIcon.style.display = 'block';
+            eyeSlashIcon.style.display = 'none';
+            currentlyVisible = null;
+        }
+    });
+}
+
+/**
+ * Add the necessary CSS styles for password toggle
+ * Only adds styles once to prevent duplication
+ */
+function addPasswordToggleStyles() {
+    // Check if styles already exist
+    if (document.getElementById('password-toggle-styles')) return;
+    
+    // Create style element
+    const styleElement = document.createElement('style');
+    styleElement.id = 'password-toggle-styles';
+    styleElement.textContent = `
+        .password-input-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+        
+        .password-input-container input {
+            flex: 1;
+            padding-right: 40px; /* Space for the eye button */
+        }
+        
+        .password-toggle {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--text-dark, #333);
+            opacity: 0.7;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1;
+        }
+        
+        .password-toggle:hover {
+            opacity: 1;
+        }
+        
+        .password-toggle svg {
+            width: 18px;
+            height: 18px;
+        }
+    `;
+    
+    // Append to document head
+    document.head.appendChild(styleElement);
+}
