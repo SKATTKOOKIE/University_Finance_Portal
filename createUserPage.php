@@ -15,34 +15,6 @@ $successMessage = $messages['success'];
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Create Account - Finance Portal</title>
     <link rel="stylesheet" href="style.css">
-    <style>
-        .form-hint {
-            font-size: 0.8rem;
-            color: #666;
-            margin-top: 3px;
-            display: block;
-        }
-
-        .requirement-met {
-            color: #00aa00;
-        }
-
-        .requirement-unmet {
-            color: #dd0000;
-        }
-
-        input:invalid {
-            border-color: #dd0000;
-        }
-
-        #password-requirements {
-            margin-bottom: 15px;
-            padding: 10px;
-            background-color: #f8f8f8;
-            border-radius: 4px;
-            display: none;
-        }
-    </style>
 </head>
 
 <body>
